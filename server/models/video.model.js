@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const editorSchema = new mongoose.Schema({
   type: Object,
-  trim: true,
   name: String,
 });
 

@@ -13,7 +13,11 @@ app.use(
 );
 
 //Router Imports
+const videoRoutes = require("./routes/video.route");
+const userRoutes = require("./routes/user.route");
 
 // Routes
+app.use("/user", userRoutes);
+app.use("/api", videoRoutes);
 
-export default app;
+module.exports = app;
