@@ -1,11 +1,11 @@
 const router = require("express").Router();
 const auth = require("../middleware/auth.middleware");
-const upload = require("../middleware/multer.middleware");
+const { upload } = require("../middleware/multer.middleware");
 const videoCtrl = require("../controllers/video.controller");
 
 router
   .route("/uploadVideo")
-  .post(auth, upload.single("video"), videoCtrl.uploadVideo);
+  .post(upload.single("video"), videoCtrl.uploadVideo);
 
 router.route("/getVideos").get(auth, videoCtrl.getVideos);
 

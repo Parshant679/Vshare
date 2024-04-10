@@ -34,6 +34,10 @@ const videoSchema = new mongoose.Schema(
       require: true,
       default: -1,
     },
+    public_id: {
+      type: String,
+      default: null,
+    },
     imageUrl: {
       type: String,
       default: null,

@@ -1,12 +1,12 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import React from "react";
 import "./App.css";
+import VideoCard from "./components/utils/videoCard";
 import UploadVideo from "./components/uploadVideos";
 
 function App() {
   return (
     <div>
+      <VideoCard />
       <UploadVideo />
     </div>
   );
