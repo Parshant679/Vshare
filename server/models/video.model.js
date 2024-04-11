@@ -11,7 +11,7 @@ const videoSchema = new mongoose.Schema(
       type: Object,
       require: true,
     },
-    videoEditor_Id: {
+    videoEditor: {
       type: editorSchema,
       require: true,
       default: null,
@@ -22,10 +22,6 @@ const videoSchema = new mongoose.Schema(
       default: null,
     },
     description: {
-      type: String,
-      default: null,
-    },
-    cloudStorageKey: {
       type: String,
       default: null,
     },
