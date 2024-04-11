@@ -1,8 +1,16 @@
 const mongoose = require("mongoose");
 
 const editorSchema = new mongoose.Schema({
-  type: Object,
-  name: String,
+  editor_id: {
+    type: Object,
+    require: true,
+    default: null,
+  },
+  name: {
+    type: String,
+    required: true,
+    default: null,
+  },
 });
 
 const videoSchema = new mongoose.Schema(
