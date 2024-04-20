@@ -3,6 +3,7 @@ const Video = require("../models/video.model");
 const cloudinaryMethods = require("../utils/cloudinary");
 const { apiResponse } = require("../utils/ApiResponse");
 const { apiError } = require("../utils/ApiError");
+const videoModel = require("../models/video.model");
 
 const videoCtrl = {
   uploadVideo: async (req, res) => {
@@ -43,8 +44,17 @@ const videoCtrl = {
     // update the public_id and imageUrl
   },
   deleteVideo: async (req, res) => {
-    const fileData = req.body;
-    const result = cloudinaryMethods.deleteVideo(fileData.public_id);
+    constvideoIds = req.body;
+    const filters = {
+      _id: {
+        $in: videoIds.map((item) => {
+          return item.id === _id;
+        }),
+      },
+    };
+
+    const res = await Video.deleteMany(filters);
+    const result = cloudinaryMethods.deleteVideo(videoIds.public_id);
     // delete file from database and cloudinary
 
     // editor does not have permission to delete the vidoe , only owner can do it.

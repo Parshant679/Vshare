@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import Button from "@mui/material/Button";
 function UploadVideo() {
   const [video, setVideo] = useState(null);
   async function handelSubmit(e) {
@@ -32,7 +32,7 @@ function UploadVideo() {
           return setVideo(e.target.files[0]);
         }}
       />
-      <button type="submit">Upload</button>
+      <Button type="submit">Upload</Button>
     </form>
   );
 }

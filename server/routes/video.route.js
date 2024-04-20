@@ -5,7 +5,7 @@ const videoCtrl = require("../controllers/video.controller");
 
 router
   .route("/uploadVideo")
-  .post(upload.single("video"), videoCtrl.uploadVideo);
+  .post(auth, upload.single("video"), videoCtrl.uploadVideo);
 
 router.route("/getVideos").get(auth, videoCtrl.getVideos);
 
