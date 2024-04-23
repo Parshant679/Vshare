@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
+const Connection = require("../models/connection.model");
 const { apiError } = require("../utils/ApiError");
 const { apiResponse } = require("../utils/ApiResponse");
 
@@ -71,9 +72,7 @@ const userCtrl = {
 
     return res
       .status(201)
-      .json(
-        new apiResponse(200, "userCreated Successfully", createdUser, true)
-      );
+      .json(new apiResponse(200, "userCreated Successfully", createdUser));
   },
   logout: (req, res) => {
     return res
@@ -97,13 +96,124 @@ const userCtrl = {
 
   acceptConnectionRequest: async (req, res) => {
     // we will accept the request
+
+    const connectionRequestId = req.query.id;
+
+    const isConnnected = await Connection.findById({
+      _id: connectionRequestId,
+    });
+
+    if (!isConnnected) {
+      throw new apiError(404, "connection not Found");
+    }
+    const updateOperation = {
+      $set: {
+        connectionStatus: 1,
+      },
+    };
+
+    const options = {
+      new: true,
+    };
+
+    const updateConnection = await Connection.findByIdAndUpdate(
+      { _id: connectionRequestId },
+      updateOperation,
+      options
+    );
+
+    if (!updateConnection) {
+      throw new apiError(
+        500,
+        "some error accure while updating the connection request"
+      );
+    }
+    return res
+      .status(2001)
+      .json(
+        new apiResponse(
+          200,
+          "connection Request accepted",
+          updateConnection.connectionStatus
+        )
+      );
   },
 
   sendConnectionRequest: async (req, res) => {
     // send the request
+
+    const { source, destination, status } = req.body;
+
+    const connection = new Connection({
+      user1: source,
+      user2: destination,
+      status: status,
+    });
+
+    await connection.save();
+
+    return res
+      .status(201)
+      .json(
+        new apiResponse(
+          200,
+          "connection Request sent Successfully",
+          connection._id
+        )
+      );
   },
   cancelConnectionRequest: async (req, res) => {
     // cancel the request
+
+    const connectionId = req.query.id;
+    const isConnnected = await Connection.findById({
+      _id: connectionId,
+    });
+
+    if (!isConnnected) {
+      throw new apiError(404, "connection not Found");
+    }
+
+    const deleteRequest = await Connection.deleteOne({ _id: connectionId });
+
+    if (!deleteRequest) {
+      throw new apiError(404, "connection not found");
+    }
+
+    return res
+      .status(204)
+      .json(200, "cancle Connection Request", deleteRequest);
+  },
+  searchUsers: async (req, res) => {
+    const { searchText, pageNo } = req.query;
+    const skipCount = (pageNo - 1) * 10;
+
+    const users = await User.aggregate([
+      {
+        $match: { name: { $regex: searchText } },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          imageUrl: 1,
+        },
+      },
+      {
+        $sort: { name: 1 },
+      },
+      {
+        $skip: skipCount,
+      },
+      { $limit: 10 },
+    ]);
+
+    if (!users) {
+      throw new apiError(500, "Some Error Occure while retriving data");
+    }
+    return res
+      .status(201)
+      .json(new apiResponse(200, "data retrived successfully", users));
   },
 };
 

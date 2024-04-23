@@ -27,8 +27,9 @@ function UserProfile() {
   const [connections, getConnections] = useState("");
   const [isSearch, setSearch] = useState("");
 
-  function handleInput() {
+  function handleInput(e) {
     try {
+      setSearch(e.target.value);
     } catch (error) {
       console.log(error);
     }
@@ -37,27 +38,28 @@ function UserProfile() {
   return (
     <div className="flex flex-col">
       <div className="Container">
-        <div className=" justify-between flex ">
+        <div className=" justify-between flex flex-wrap">
           <h1 className="text-6xl text-white font-bold">{User.name}</h1>
           <Logout />
         </div>
         <h2
-          className="text-yellow-400 m-4"
+          className="text-yellow-400 m-4 cursor-pointer"
           onClick={() => navigate(`/userSpace/${User._id}`, { state: User })}
         >
-          My Space
+          Click to Your Space
         </h2>
         <div className="mt-6 flex flex-wrap justify-between">
-          <h2 className=" text-white font-bold">Your Connections</h2>
+          <div className="text-white font-bold flex flex-wrap  justify-stretch">
+            <h2>Your Connections</h2>
+            {isSearch && <h2>Search Results</h2>}
+          </div>
           <div className="flex p-2 text-gray-300">
             <IoSearchOutline onClick={handleInput} />
             <input
               type="text"
               placeholder="Search"
               className="mx-1 outline-none font-size text-xs bg-black "
-              onChange={(e) => {
-                return setSearch(e.target.value);
-              }}
+              onChange={handleInput}
             ></input>
           </div>
         </div>
