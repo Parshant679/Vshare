@@ -2,12 +2,14 @@ const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(`${proces.env.MONGODB_URI}/${DB_NAME}`);
+    const DB_NAME = "vShare";
+    await mongoose.connect(`${process.env.MONGODB_URI}${DB_NAME}`);
     console.log("\n Mongo Db database connected");
   } catch (err) {
-    console.log("Error occure while connecting to DB", err);
+    console.log("Error occure while connecting to DB");
+    console.log(err);
     process.exit(1);
   }
 };
 
-export default connectDB;
+module.exports = connectDB;

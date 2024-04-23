@@ -1,18 +1,10 @@
 class apiResponse {
-  constructor(statuscode, message, data, success) {
+  constructor(statuscode, message = "success", data) {
     this.statuscode = statuscode;
     this.message = message;
     this.data = data;
-    this.success = success;
-  }
-  toJson() {
-    return {
-      statusCode: this.statuscode,
-      message: this.message,
-      data: this.data,
-      success: this.success,
-    };
+    this.success = statuscode < 400;
   }
 }
 
-export default apiResponse;
+module.exports = { apiResponse };

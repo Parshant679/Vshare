@@ -1,9 +1,16 @@
 const mongoose = require("mongoose");
 
 const editorSchema = new mongoose.Schema({
-  type: Object,
-  trim: true,
-  name: String,
+  editor_id: {
+    type: Object,
+    require: true,
+    default: null,
+  },
+  name: {
+    type: String,
+    required: true,
+    default: null,
+  },
 });
 
 const videoSchema = new mongoose.Schema(
@@ -12,7 +19,7 @@ const videoSchema = new mongoose.Schema(
       type: Object,
       require: true,
     },
-    videoEditor_Id: {
+    videoEditor: {
       type: editorSchema,
       require: true,
       default: null,
@@ -26,14 +33,14 @@ const videoSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-    cloudStorageKey: {
-      type: String,
-      default: null,
-    },
     status: {
       type: Number,
       require: true,
       default: -1,
+    },
+    public_id: {
+      type: String,
+      default: null,
     },
     imageUrl: {
       type: String,

@@ -1,0 +1,12 @@
+.Container{
+   margin-left:10rem;
+   margin-top: 10rem;
+   margin-right: 10rem;
+}
+
+@media (max-width: 768px) {
+   /* Selectors for your elements */
+   .Container {
+     margin: 1rem; /* Remove margin */
+   }
+ }
