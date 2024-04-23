@@ -5,11 +5,13 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+console.log("entering cors");
 app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN,
-    credentials: true,
-  })
+  cors()
+  //   {
+  //    origin: "*",
+  //    credentials: true,
+  //  }
 );
 
 //Router Imports
@@ -20,7 +22,7 @@ const userRoutes = require("./routes/user.route");
 app.get("/", (req, res) => {
   res.send("welcome to backend");
 });
-app.use("/user", userRoutes);
+app.use("/api/user", userRoutes);
 app.use("/api", videoRoutes);
 
-module.exports = app;
+module.exports = { app };

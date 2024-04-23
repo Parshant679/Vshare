@@ -18,15 +18,15 @@ const Register = () => {
   const registerSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(import.meta.env.VITE_API_BASE_URL + "/user/register", {
+      await axios.post(import.meta.env.VITE_BASE_URL + "/user/register", {
         ...user,
       });
 
       localStorage.setItem("firstLogin", true);
 
-      window.location.href = "/";
+      window.location.href = "/Login";
     } catch (err) {
-      alert(err.response.data.msg);
+      alert(err.msg);
     }
   };
 

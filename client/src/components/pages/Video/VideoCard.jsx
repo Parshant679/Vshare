@@ -16,7 +16,8 @@ function getRandomImage(images) {
   return randomIndex;
 }
 
-function VideoCard({ item }) {
+function VideoCard({ data }) {
+  console.log(data);
   const images = [
     image1,
     image2,
@@ -34,13 +35,13 @@ function VideoCard({ item }) {
       <img src={randomImage} alt="Placeholder Image" />
       <div className="data">
         <p className="m-1 text-gray-400 font-sans">
-          Title:
+          Title:{data.title}
           <br />
-          Assigned To: None
+          Assigned To:
           <br />
           Last Updated:
           <br />
-          Status:
+          Status:{data.status}
           <br />
           %:
           <br />

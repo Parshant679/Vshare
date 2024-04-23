@@ -1,9 +1,8 @@
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
 const Video = require("../models/video.model");
 const cloudinaryMethods = require("../utils/cloudinary");
 const { apiResponse } = require("../utils/ApiResponse");
 const { apiError } = require("../utils/ApiError");
-const videoModel = require("../models/video.model");
 
 const videoCtrl = {
   uploadVideo: async (req, res) => {
@@ -12,8 +11,9 @@ const videoCtrl = {
 
     console.log(fileMetadata);
     // const { public_id, signature ,url ,secure_url} = cloudinaryMethods.uploadVideo();
-    const video = await Video.insertOne(videoData);
-    if (!video) {
+    const video = new Video(videoData);
+    const result = await video.save();
+    if (!result) {
       // delete the file from cloudinary
       throw new apiError(500, "some error occure while adding video data");
     }
@@ -53,7 +53,7 @@ const videoCtrl = {
       },
     };
 
-    const res = await Video.deleteMany(filters);
+    const r = await Video.deleteMany(filters);
     const result = cloudinaryMethods.deleteVideo(videoIds.public_id);
     // delete file from database and cloudinary
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./User.css";
+import "./UserSpace.css";
 import { VscListFilter } from "react-icons/vsc";
 import { IoSearchOutline } from "react-icons/io5";
 import { FaSortAmountUp, FaSortAmountDownAlt } from "react-icons/fa";
@@ -10,8 +10,8 @@ import {
 import { GrInProgress } from "react-icons/gr";
 import VideoData from "../Video/VideoData";
 import FormDialog from "../../utils/FormDialog";
-
-function User() {
+import Logout from "../../utils/Logout";
+function UserSpace() {
   const [statusType, setStatus] = useState("-1");
   const [isSearch, setSearch] = useState("");
   const [filters, setFilters] = useState({
@@ -47,37 +47,40 @@ function User() {
   return (
     <div className="flex flex-col">
       <div className="Container">
-        <div className=" justify-between flex ">
+        <div className="flex justify-between">
           <h1 className="text-6xl text-white font-bold">My Space</h1>
-          <FormDialog />
+          <div className="flex justify-around">
+            <Logout />
+            <FormDialog />
+          </div>
         </div>
         <div className="flex flex-wrap mt-10 justify-between">
           <div className="text-12 font-bold  flex flex-wrap cursor-pointer text-gray-400 ">
-            <div className="flex flex-wrap p-2 hover:bg-slate-400">
+            <div className="flex flex-wrap p-2 ">
               <MdOutlineAssignmentLate className="m-1" />
               <h2>Not Assigned</h2>
             </div>
-            <div className="flex flex-wrap p-2 hover:bg-slate-400">
+            <div className="flex flex-wrap p-2 ">
               <GrInProgress className="m-1" />
               <h2>In Progress</h2>
             </div>
-            <div className="flex flex-wrap p-2 hover:bg-slate-400">
+            <div className="flex flex-wrap p-2 ">
               <MdOutlineIncompleteCircle className="m-1" />
               <h2>Completed</h2>
             </div>
           </div>
           <div className="flex flex-wrap cursor-pointer text-gray-400 p-2">
-            <div className="p-2 hover:bg-slate-400">
+            <div className="p-2 ">
               <VscListFilter />
             </div>
-            <div className="p-2 hover:bg-slate-400" onClick={handleSort}>
+            <div className="p-2 " onClick={handleSort}>
               {filters.sort === 1 ? (
                 <FaSortAmountUp />
               ) : (
                 <FaSortAmountDownAlt />
               )}
             </div>
-            <div className="flex p-2 hover:bg-slate-400">
+            <div className="flex p-2 ">
               <IoSearchOutline
                 onClick={() => {
                   if (!isSearch) {
@@ -104,4 +107,4 @@ function User() {
   );
 }
 
-export default User;
+export default UserSpace;

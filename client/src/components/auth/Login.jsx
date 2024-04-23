@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Login = () => {
@@ -7,6 +7,8 @@ const Login = () => {
     email: "",
     password: "",
   });
+
+  const navigate = useNavigate();
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
@@ -16,13 +18,15 @@ const Login = () => {
   const loginSubmit = async (e) => {
     e.preventDefault();
     try {
-      window.location.href = "/user/123";
-      await axios.post(import.meta.env.VITE_API_BASE_URL + "/user/login", {
-        ...user,
-      });
-      localStorage.setItem("firstLogin", true);
+      const res = await axios.post(
+        import.meta.env.VITE_BASE_URL + "/user/login",
+        {
+          ...user,
+        }
+      );
+      navigate("/userProfile/" + res.data.data._id, { state: res.data.data });
     } catch (err) {
-      alert(err.response.msg);
+      alert(err);
     }
   };
 

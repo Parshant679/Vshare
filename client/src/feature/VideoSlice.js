@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getUserViodes } from "../Store/reducres/getUserVideos";
+import { getUserVideos } from "../Store/reducres/getUserVideos";
 const initialState = {
   Videos: [],
-  vidoeCount: 10,
+  videoCount: 10,
 };
 
 const videoSlice = createSlice({
@@ -16,9 +16,12 @@ const videoSlice = createSlice({
         }
       });
     },
+    addVideos: (state, action) => {
+      state.Videos = action.payload.Videos;
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(getUserViodes.fulfilled, (state, action) => {
+    builder.addCase(getUserVideos.fulfilled, (state, action) => {
       if (action.payload) {
         state.Videos = action.payload;
       }
@@ -26,5 +29,5 @@ const videoSlice = createSlice({
   },
 });
 
-export const { deleteVideos } = videoSlice.actions;
+export const { deleteVideos, addVidoes } = videoSlice.actions;
 export default videoSlice.reducer;

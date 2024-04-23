@@ -11,11 +11,13 @@ const userCtrl = {
     if (!user) {
       throw new apiError(401, "Invalid user credentials");
     }
-
+    console.log(user.password);
+    console.log(req.body);
     const isMatch = password.localeCompare(user.password) ? true : false;
 
+    console.log("Is Match", isMatch);
     if (!isMatch) {
-      return res.status(403).send("incorrect password");
+      throw new apiError(403, "incorrect password");
     }
     const accessToken = createAccessToken({ id: user._id });
     const refreshToken = createRefreshToken({ id: user._id });
@@ -35,11 +37,14 @@ const userCtrl = {
   },
 
   register: async (req, res) => {
-    const { name, email, password, imageUrl } = req.body;
+    console.log(req.body);
+    const { name, email, password } = req.body;
 
-    const existedUser = await User.findOne(
-      $or[({ email: email }, { name: name })]
-    );
+    // add image Url after words
+
+    const existedUser = await User.findOne({
+      $or: [{ email: email }, { name: name }],
+    });
 
     if (existedUser) {
       return new apiError(
@@ -48,12 +53,13 @@ const userCtrl = {
       );
     }
 
-    const user = await User.insertOne({
+    const user = new User({
       name: name,
       email: email,
       password: password,
-      imageUrl: imageUrl,
+      // /  imageUrl: imageUrl,
     });
+    await user.save();
 
     const createdUser = await User.findById({ _id: user._id }).select(
       "-password"
@@ -69,9 +75,16 @@ const userCtrl = {
         new apiResponse(200, "userCreated Successfully", createdUser, true)
       );
   },
-
+  logout: (req, res) => {
+    return res
+      .status(200)
+      .clearCookie("accessToken")
+      .clearCookie("refreshToken")
+      .json(new apiResponse(200, "logout successfull"));
+  },
   getUserdata: async (req, res) => {
-    const user_id = req.body.user_id;
+    const user_id = req.query.id;
+    console.log(user_id);
     const user = await User.findOne({ _id: user_id }).select("-password");
 
     if (!user) {
