@@ -8,7 +8,8 @@ router
   .post(auth, upload.single("video"), videoCtrl.uploadVideo);
 
 router.route("/getVideos").get(auth, videoCtrl.getVideos);
-
+router.route("/getSingleVideoData").get(auth, videoCtrl.getSignleVideoData);
+router.route("/updateVideoData".post(auth, videoCtrl.updateVideoData));
 router.route("/deleteVideo").delete(auth, videoCtrl.deleteVideo);
 
 router.route("/assignEditor").put(auth, videoCtrl.assignEditor);
