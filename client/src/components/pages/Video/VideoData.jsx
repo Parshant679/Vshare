@@ -3,7 +3,9 @@ import "./VideoData.css";
 import VideoCard from "./VideoCard";
 import { useAppSelector } from "../../../hooks/useApp";
 
-function VideoData() {
+function VideoData({ data, filters }) {
+  console.log("video array", data);
+  console.log("Video filters", filters);
   const videos = [
     { _id: 123, title: "I am not a legend", status: "Inprogress" },
     { _id: 124, title: "I am dead", status: "Inprogress" },

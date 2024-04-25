@@ -13,7 +13,6 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     updateUser: (state, action) => {
-      console.log(action.payload);
       state.user.name = action.payload.name;
       state.user._id = action.payload._id;
       state.user.email = action.payload.email;

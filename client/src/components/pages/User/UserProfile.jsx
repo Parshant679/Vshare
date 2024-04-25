@@ -1,28 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import Connection from "../Connections/Connection";
+import { useParams } from "react-router-dom";
 import "./UserSpace.css";
 import Logout from "../../utils/Logout";
 import axios from "axios";
+import { useAppDispatch, useAppSelector } from "../../../hooks/useApp";
+import { updateUser } from "../../../feature/UserSlice";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function UserProfile() {
   const navigate = useNavigate();
-  const User = useLocation().state;
-  const id = User._id;
+  const dispatch = useAppDispatch();
+  const { id } = useParams();
 
   async function fetchData() {
     const res = await axios.get(
-      import.meta.env.VITE_BASE_URL + "/user/getUser?id=" + id
+      import.meta.env.VITE_BASE_URL + "/user/getUser?id=" + id,
+      {
+        withCredentials: true,
+      }
     );
 
-    console.log(res);
+    dispatch(updateUser(res.data.data));
   }
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  const User = useAppSelector((state) => state.userData.user);
 
   const [connections, getConnections] = useState("");
   const [isSearch, setSearch] = useState("");
@@ -44,7 +52,9 @@ function UserProfile() {
         </div>
         <h2
           className="text-yellow-400 m-4 cursor-pointer"
-          onClick={() => navigate(`/userSpace/${User._id}`, { state: User })}
+          onClick={() =>
+            navigate(`/userSpace/${User._id}`, { state: User._id })
+          }
         >
           Click to Your Space
         </h2>

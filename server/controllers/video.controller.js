@@ -7,35 +7,37 @@ const { apiError } = require("../utils/ApiError");
 const videoCtrl = {
   uploadVideo: async (req, res) => {
     const fileMetadata = req.file;
+    console.log("req.file", fileMetadata);
+    console.log("body", req.body);
     const videoData = { ...fileMetadata, ...req.body };
-    console.log(fileMetadata);
-    if (!videoData.public_id) {
-      // first time Upload
-      // const { public_id, signature ,url ,secure_url} = cloudinaryMethods.uploadVideo(videoData.path);
+    console.log(videoData);
+    // if (!videoData.public_id) {
+    //   // first time Upload
+    //   // const { public_id, signature ,url ,secure_url} = cloudinaryMethods.uploadVideo(videoData.path);
 
-      videoData.public_id = public_id;
-      videoData.signature = signature;
-      videoData.url = url;
-      videoData.secure_url = secure_url;
-    } else {
-      // re - upload
-      // const { public_id, signature, url, secure_url } =
-      //   cloudinaryMethods.uploadVideo(videoData.path);
-      // videoData.public_id = public_id;
-      // videoData.signature = signature;
-      // videoData.url = url;
-      // videoData.secure_url = secure_url;
-    }
+    //   videoData.public_id = public_id;
+    //   videoData.signature = signature;
+    //   videoData.url = url;
+    //   videoData.secure_url = secure_url;
+    // } else {
+    //   // re - upload
+    //   // const { public_id, signature, url, secure_url } =
+    //   //   cloudinaryMethods.uploadVideo(videoData.path);
+    //   // videoData.public_id = public_id;
+    //   // videoData.signature = signature;
+    //   // videoData.url = url;
+    //   // videoData.secure_url = secure_url;
+    // }
 
-    // Try to use Upsert Query || findOneAndUpdate option upsert: true
+    // // Try to use Upsert Query || findOneAndUpdate option upsert: true
 
-    const video = new Video(videoData);
-    const result = await video.save();
+    // // const video = new Video(videoData);
+    // // const result = await video.save();
 
-    if (!result) {
-      throw new apiError(500, "some error occure while adding video data");
-    }
-
+    // if (!result) {
+    //   throw new apiError(500, "some error occure while adding video data");
+    // }
+    const video = {};
     return res
       .status(201)
       .json(new apiResponse(200, "Video uploaded Successfully", video));
@@ -61,7 +63,11 @@ const videoCtrl = {
     const { userId, pageNo } = req.query;
     const skipCount = (pageNo - 1) * 10;
     const videos = Video.aggregate([
-      { $match: { owner_Id: userId } },
+      {
+        $match: {
+          $or: [{ owner_Id: userId }, { "videoEditor.editor_id": userId }],
+        },
+      },
       {
         $proejct: {
           owner_Id: 1,
@@ -138,7 +144,7 @@ const videoCtrl = {
     // assign editor to video
 
     const editorData = req.body;
-    const videoData = await Video.findById({ _id: req.query.id });
+    const videoData = await Video.findById({ _id: req.query.videoId });
     if (!videoData) {
       throw new apiError(401, "Invalid video Id");
     }

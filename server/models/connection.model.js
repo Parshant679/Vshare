@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-  id: {
+  _id: {
     type: Object,
     require: true,
     default: null,
