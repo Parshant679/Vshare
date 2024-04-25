@@ -12,11 +12,8 @@ const userCtrl = {
     if (!user) {
       throw new apiError(401, "Invalid user credentials");
     }
-    console.log(user.password);
-    console.log(req.body);
-    const isMatch = password.localeCompare(user.password) ? true : false;
 
-    console.log("Is Match", isMatch);
+    const isMatch = password.localeCompare(user.password) ? true : false;
     if (!isMatch) {
       throw new apiError(403, "incorrect password");
     }
@@ -27,7 +24,8 @@ const userCtrl = {
 
     const options = {
       httpOnly: true,
-      secure: true,
+      secure: false,
+      path: "/",
     };
 
     res
@@ -38,7 +36,6 @@ const userCtrl = {
   },
 
   register: async (req, res) => {
-    console.log(req.body);
     const { name, email, password } = req.body;
 
     // add image Url after words
@@ -141,7 +138,7 @@ const userCtrl = {
 
   sendConnectionRequest: async (req, res) => {
     // send the request
-
+    console.log(req.body);
     const { source, destination, status } = req.body;
 
     const connection = new Connection({

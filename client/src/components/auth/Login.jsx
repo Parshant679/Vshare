@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-
 const Login = () => {
   const [user, setUser] = useState({
     email: "",
@@ -22,9 +21,12 @@ const Login = () => {
         import.meta.env.VITE_BASE_URL + "/user/login",
         {
           ...user,
+        },
+        {
+          withCredentials: true,
         }
       );
-      navigate("/userProfile/" + res.data.data._id, { state: res.data.data });
+      navigate("/userProfile/" + res.data.data._id);
     } catch (err) {
       alert(err);
     }

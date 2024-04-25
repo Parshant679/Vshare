@@ -1,16 +1,16 @@
 const jwt = require("jsonwebtoken");
 const { apiError } = require("../utils/ApiError");
 
-const auth = (req, res) => {
+const auth = (req, res, next) => {
   try {
     const token = req.cookies?.accessToken;
-    console.log(token);
 
     if (!token) {
       throw new apiError(401, "Unauthorized request");
     }
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+      if (err) throw new apiError(400, "Invalid Authentication");
       req.user = user;
       next();
     });

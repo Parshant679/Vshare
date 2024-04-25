@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const editorSchema = new mongoose.Schema({
-  editor_id: {
+  editor_Id: {
     type: Object,
     require: true,
     default: null,

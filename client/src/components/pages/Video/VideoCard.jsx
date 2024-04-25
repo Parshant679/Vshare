@@ -10,6 +10,7 @@ import {
   image8,
   image9,
 } from "../../../assets/exportImage";
+import { MdOutlineDeleteOutline } from "react-icons/md";
 
 function getRandomImage(images) {
   const randomIndex = Math.floor(Math.random() * images);
@@ -17,7 +18,6 @@ function getRandomImage(images) {
 }
 
 function VideoCard({ data }) {
-  console.log(data);
   const images = [
     image1,
     image2,
@@ -33,7 +33,7 @@ function VideoCard({ data }) {
   return (
     <div className="card">
       <img src={randomImage} alt="Placeholder Image" />
-      <div className="data">
+      <div className="data flex flex-wrap justify-between">
         <p className="m-1 text-gray-400 font-sans">
           Title:{data.title}
           <br />
@@ -46,6 +46,7 @@ function VideoCard({ data }) {
           %:
           <br />
         </p>
+        <MdOutlineDeleteOutline className="mt-auto  size-5" />
       </div>
     </div>
   );

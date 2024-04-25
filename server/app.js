@@ -5,13 +5,12 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-console.log("entering cors");
+
 app.use(
-  cors()
-  //   {
-  //    origin: "*",
-  //    credentials: true,
-  //  }
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
 );
 
 //Router Imports
