@@ -1,0 +1,9 @@
+{
+    "rewrites":  [
+        {"source": "/", "destination": "/"},
+        {"source": "/Login", "destination": "/Login"},
+        {"source": "/userProfile/:id", "destination": "/userProfile/:id"},
+        {"source": "/userSpace/:id", "destination": "/userSpace/:id"},
+        {"source": "/logout", "destination": "/logout"}
+     ]
+ }
