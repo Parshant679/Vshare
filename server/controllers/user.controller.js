@@ -24,6 +24,7 @@ const userCtrl = {
       httpOnly: true,
       secure: true,
       path: "/",
+      sameSite: "none",
     };
 
     res
