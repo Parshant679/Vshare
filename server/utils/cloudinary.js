@@ -1,28 +1,33 @@
-// import { v2 as cloudinary } from "cloudinary";
-const cloudinary = require("cloudinary");
+const cloudinary = require("cloudinary").v2;
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: "dgypv5flo",
+  api_key: "917975424867997",
+  api_secret: "RgAxMkPh4gfmL2Vo1jm-k1CKGzs",
 });
+
 const cloudinaryMethods = {
   uploadVideos: async (LocalFilePath) => {
     try {
-      const response = await cloudinary.v2.uploader.upload(LocalFilePath, {
+      const response = await cloudinary.uploader.upload(LocalFilePath, {
         resource_type: "video",
       });
-
+      console.log("cloudinry responxe", response);
       return response;
     } catch (error) {
-      console.log(err);
+      console.log(error);
     }
   },
   deleteVideo: async (public_id) => {
     try {
       const options = {
+        resource_type: "video",
         invalidate: true,
+        type: "authenticated",
       };
-      const response = await cloudinary.v2.uploader.destroy(public_id, options);
+      const response = await cloudinary.uploader.api.delete_resources(
+        [public_id],
+        { type: "upload", resource_type: "video" }
+      );
       return response;
     } catch (err) {
       console.log(err);

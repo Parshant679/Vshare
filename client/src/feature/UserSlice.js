@@ -6,6 +6,7 @@ const initialState = {
     email: null,
     imageUrl: null,
   },
+  connections: [],
 };
 
 const userSlice = createSlice({
@@ -18,8 +19,26 @@ const userSlice = createSlice({
       state.user.email = action.payload.email;
       state.user.imageUrl = action.payload.imageUrl;
     },
+    searchConnections: (state, action) => {
+      state.connections = action.payload;
+    },
+    deleteSearch: (state, action) => {
+      state.connections = state.connections.filter(
+        (item) => item._id === action.payload
+      );
+    },
+
+    changeStatus: (state, action) => {
+      state.connections = state.connections.map((item) => {
+        if (action.payload === item._id) {
+          item.connectionStatus = 2;
+          return item;
+        }
+      });
+    },
   },
 });
 
-export const { updateUser } = userSlice.actions;
+export const { updateUser, searchConnections, deleteSearch, changeStatus } =
+  userSlice.actions;
 export default userSlice.reducer;

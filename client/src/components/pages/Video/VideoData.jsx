@@ -3,14 +3,25 @@ import "./VideoData.css";
 import VideoCard from "./VideoCard";
 import { useAppSelector } from "../../../hooks/useApp";
 
-function VideoData({ data, filters }) {
-  console.log("video array", data);
-  console.log("Video filters", filters);
-  const videos = [
-    { _id: 123, title: "I am not a legend", status: "Inprogress" },
-    { _id: 124, title: "I am dead", status: "Inprogress" },
-    { _id: 125, title: "I am Legend", status: "Inprogress" },
-  ]; //useAppSelector((state) => state.videoData.Videos);
+function VideoData({ filters }) {
+  const videos = useAppSelector((state) => state.videoData.Videos).filter(
+    (item) => {
+      if (
+        (filters.status === 1 || filters.status === 0) &&
+        filters.status === item.status
+      ) {
+        return item;
+      } else if (filters.status === -1) {
+        return item;
+      }
+    }
+  );
+
+  if (filters.sort === "Desc") {
+    videos.sort((a, b) => a.updatedAt > b.updatedAt);
+  } else {
+    videos.sort((a, b) => a.updatedAt < b.updatedAt);
+  }
   return (
     <div className="video__grid">
       {videos.map((item) => {

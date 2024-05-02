@@ -6,8 +6,11 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import VideoApi from "../pages/Video/utils/videoApi";
+import { useAppDispatch } from "../../hooks/useApp";
+import { addVideos } from "../../feature/VideoSlice";
 
-const FormDialog = () => {
+const FormDialog = ({ id }) => {
+  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -40,9 +43,13 @@ const FormDialog = () => {
     selectedFile.append("video", file);
     selectedFile.append("title", title);
     selectedFile.append("description", description);
+    selectedFile.append("owner_Id", id);
+    selectedFile.append("cloud_id", -1);
+    selectedFile.append("updatedby_id", id);
+    selectedFile.append("video_id", 0);
 
     VideoApi.uploadVideo(selectedFile)
-      .then((res) => console.log(res))
+      .then((res) => dispatch(addVideos(res.data.data)))
       .catch((err) => console.log(err));
 
     handleClose();

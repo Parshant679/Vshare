@@ -1,4 +1,5 @@
 import axios from "axios";
+
 const VideoApi = {
   getUserVidoes: async (user_Id, pageNo = 1) => {
     try {
@@ -62,7 +63,7 @@ const VideoApi = {
     try {
       return await axios.delete(
         import.meta.env.VITE_BASE_URL +
-          `/deleteVideo?videoID=${videoId}&public_id=${public_id}`,
+          `/deleteVideo?videoId=${videoId}&public_id=${public_id}`,
         {
           withCredentials: true,
         }

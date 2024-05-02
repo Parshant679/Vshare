@@ -7,7 +7,7 @@ function Logout() {
         import.meta.env.VITE_BASE_URL + "/user/logout",
         {}
       );
-      console.log(res);
+
       if (res.data.success) {
         window.location.href = "/";
       }

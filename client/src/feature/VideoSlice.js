@@ -11,13 +11,17 @@ const videoSlice = createSlice({
   reducers: {
     deleteVideos: (state, action) => {
       state.Videos = state.Videos.filter((item) => {
-        if (!action.payload.includes(item._id)) {
+        if (action.payload !== item._id) {
           return item;
         }
       });
     },
     addVideos: (state, action) => {
-      state.Videos = action.payload.Videos;
+      state.Videos = action.payload.filter((item) => {
+        if (!state.Videos.includes(item._id)) {
+          return item;
+        }
+      });
     },
   },
   extraReducers: (builder) => {
@@ -29,5 +33,5 @@ const videoSlice = createSlice({
   },
 });
 
-export const { deleteVideos, addVidoes } = videoSlice.actions;
+export const { deleteVideos, addVideos } = videoSlice.actions;
 export default videoSlice.reducer;

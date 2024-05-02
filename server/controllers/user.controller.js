@@ -20,8 +20,6 @@ const userCtrl = {
     const accessToken = createAccessToken({ id: user._id });
     const refreshToken = createRefreshToken({ id: user._id });
 
-    delete user["password"];
-
     const options = {
       httpOnly: true,
       secure: false,
@@ -80,7 +78,7 @@ const userCtrl = {
   },
   getUserdata: async (req, res) => {
     const user_id = req.query.id;
-    console.log(user_id);
+
     const user = await User.findOne({ _id: user_id }).select("-password");
 
     if (!user) {
@@ -105,7 +103,7 @@ const userCtrl = {
     }
     const updateOperation = {
       $set: {
-        connectionStatus: 1,
+        connectionStatus: 2,
       },
     };
 
@@ -138,13 +136,13 @@ const userCtrl = {
 
   sendConnectionRequest: async (req, res) => {
     // send the request
-    console.log(req.body);
+
     const { source, destination, status } = req.body;
 
     const connection = new Connection({
       user1: source,
       user2: destination,
-      status: status,
+      connectionStatus: status,
     });
 
     await connection.save();
@@ -182,12 +180,12 @@ const userCtrl = {
       .json(200, "cancle Connection Request", deleteRequest);
   },
   searchUsers: async (req, res) => {
-    const { searchText, pageNo } = req.query;
-    const skipCount = (pageNo - 1) * 10;
+    searchText = req.query.searchText;
+    const skipCount = (req.query.pageNo - 1) * 10;
 
     const users = await User.aggregate([
       {
-        $match: { name: { $regex: searchText } },
+        $match: { name: { $regex: searchText, $options: "i" } },
       },
       {
         $project: {
@@ -195,6 +193,9 @@ const userCtrl = {
           name: 1,
           imageUrl: 1,
         },
+      },
+      {
+        $addFields: { connectionStatus: -1 },
       },
       {
         $sort: { name: 1 },
@@ -211,6 +212,27 @@ const userCtrl = {
     return res
       .status(201)
       .json(new apiResponse(200, "data retrived successfully", users));
+  },
+  getConnections: async (req, res) => {
+    const { id, pageNo } = req.query;
+    const skipCount = (pageNo - 1) * 20;
+
+    const connections = await Connection.aggregate([
+      {
+        $match: { "user1._id": id, connectionStatus: { $gte: 0 } },
+      },
+      {
+        $skip: skipCount,
+      },
+      { $limit: 10 },
+    ]);
+
+    if (!connections) {
+      throw new apiError(500, "Some Error Occure while retriving data");
+    }
+    return res
+      .status(201)
+      .json(new apiResponse(200, "data retrived successfully", connections));
   },
 };
 
