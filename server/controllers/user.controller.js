@@ -103,7 +103,7 @@ const userCtrl = {
     }
     const updateOperation = {
       $set: {
-        connectionStatus: 1,
+        connectionStatus: 2,
       },
     };
 
@@ -136,13 +136,13 @@ const userCtrl = {
 
   sendConnectionRequest: async (req, res) => {
     // send the request
-    console.log(req.body);
-    const { source, destination, status } = req.body;
 
+    const { source, destination, status } = req.body;
+    console.log(typeof status);
     const connection = new Connection({
       user1: source,
       user2: destination,
-      status: status,
+      connectionStatus: status,
     });
 
     await connection.save();
@@ -180,9 +180,9 @@ const userCtrl = {
       .json(200, "cancle Connection Request", deleteRequest);
   },
   searchUsers: async (req, res) => {
-    const { searchText, pageNo } = req.query;
-    const skipCount = (pageNo - 1) * 10;
-    searchText = "/.*" + searchText + ".*/";
+    searchText = req.query.searchText;
+    const skipCount = (req.query.pageNo - 1) * 10;
+
     const users = await User.aggregate([
       {
         $match: { name: { $regex: searchText, $options: "i" } },
@@ -193,6 +193,9 @@ const userCtrl = {
           name: 1,
           imageUrl: 1,
         },
+      },
+      {
+        $addFields: { connectionStatus: -1 },
       },
       {
         $sort: { name: 1 },
@@ -210,13 +213,13 @@ const userCtrl = {
       .status(201)
       .json(new apiResponse(200, "data retrived successfully", users));
   },
-  getConnectios: async (req, res) => {
+  getConnections: async (req, res) => {
     const { id, pageNo } = req.query;
-    const skipCount = (pageNo - 1) * 10;
+    const skipCount = (pageNo - 1) * 20;
 
     const connections = await Connection.aggregate([
       {
-        $match: { "user1._id": id, connectionStatus: 1 },
+        $match: { "user1._id": id, connectionStatus: { $gte: 0 } },
       },
       {
         $skip: skipCount,

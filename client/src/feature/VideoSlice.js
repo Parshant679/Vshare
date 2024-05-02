@@ -11,7 +11,7 @@ const videoSlice = createSlice({
   reducers: {
     deleteVideos: (state, action) => {
       state.Videos = state.Videos.filter((item) => {
-        if (action.payload._id !== item._id) {
+        if (action.payload !== item._id) {
           return item;
         }
       });

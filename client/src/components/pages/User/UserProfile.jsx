@@ -15,10 +15,9 @@ function UserProfile() {
   const dispatch = useAppDispatch();
   const { id } = useParams();
   const [isSearch, setSearch] = useState("");
-  const [pageNo, setPageNo] = useState(0);
+  const [pageNo, setPageNo] = useState(1);
   function setSearchText(searchText) {
     setSearch(searchText);
-    setPageNo(pageNo + 1);
   }
 
   async function fetchData() {
@@ -33,7 +32,7 @@ function UserProfile() {
   }
 
   const fetchConnections = async () => {
-    const res = axios.get(
+    const res = await axios.get(
       import.meta.env.VITE_BASE_URL +
         "/user/getConnections?id=" +
         id +
@@ -64,7 +63,7 @@ function UserProfile() {
     if (isSearch) {
       fetchData();
     }
-  }, [isSearch, pageNo]);
+  }, [isSearch]);
 
   const User = useAppSelector((state) => state.userData.user);
   const searchedProfiles = useAppSelector(
@@ -93,8 +92,10 @@ function UserProfile() {
           Click to Your Space
         </h2>
         <div className="mt-6 flex flex-wrap justify-between">
-          <div className="text-white font-bold flex flex-wrap  justify-stretch">
-            <h2 onClick={handleConnection}>Your Connections</h2>
+          <div className="text-white font-bold flex flex-wrap  justify-between">
+            <h2 onClick={handleConnection} className="cursor-pointer">
+              Your Connections
+            </h2>
             {isSearch && <h2>Search Results</h2>}
           </div>
           <div className="flex p-2 text-gray-300">
@@ -103,7 +104,7 @@ function UserProfile() {
         </div>
         <hr className="border-gray-500" />
         <div className="flex flex-col">
-          {searchedProfiles ? (
+          {!searchedProfiles ? (
             <div className=" text-white m-10 ">Please Add into connection</div>
           ) : (
             searchedProfiles.map((item) => (
@@ -111,6 +112,7 @@ function UserProfile() {
                 key={item._id}
                 connection={item}
                 isSearch={isSearch}
+                name={User.name}
               />
             ))
           )}
