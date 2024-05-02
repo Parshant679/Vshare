@@ -78,7 +78,7 @@ const userCtrl = {
   },
   getUserdata: async (req, res) => {
     const user_id = req.query.id;
-    console.log(user_id);
+
     const user = await User.findOne({ _id: user_id }).select("-password");
 
     if (!user) {
@@ -138,7 +138,7 @@ const userCtrl = {
     // send the request
 
     const { source, destination, status } = req.body;
-    console.log(typeof status);
+
     const connection = new Connection({
       user1: source,
       user2: destination,

@@ -22,7 +22,6 @@ const videoSlice = createSlice({
           return item;
         }
       });
-      console.log(state.Videos);
     },
   },
   extraReducers: (builder) => {

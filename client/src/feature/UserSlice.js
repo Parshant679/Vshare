@@ -20,16 +20,12 @@ const userSlice = createSlice({
       state.user.imageUrl = action.payload.imageUrl;
     },
     searchConnections: (state, action) => {
-      console.log(action.payload);
       state.connections = action.payload;
-      console.log(state.connections);
     },
     deleteSearch: (state, action) => {
-      console.log(action.payload);
       state.connections = state.connections.filter(
         (item) => item._id === action.payload
       );
-      console.log(state.connections);
     },
 
     changeStatus: (state, action) => {
@@ -39,7 +35,6 @@ const userSlice = createSlice({
           return item;
         }
       });
-      console.log(state.connections);
     },
   },
 });

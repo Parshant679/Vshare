@@ -8,7 +8,6 @@ cloudinary.config({
 const cloudinaryMethods = {
   uploadVideos: async (LocalFilePath) => {
     try {
-      console.log(LocalFilePath);
       const response = await cloudinary.uploader.upload(LocalFilePath, {
         resource_type: "video",
       });
