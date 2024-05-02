@@ -72,7 +72,7 @@ function Connection({ connection, isSearch, name }) {
         ) : (
           <button onClick={unFollow}>Unfollow</button>
         )}
-        {connection && connection.user2.name === name && (
+        {!connection && connection.user2._id === id && (
           <>
             <span>{connection.user2.name}</span>
             <button className="px-3" onClick={acceptRequest}>

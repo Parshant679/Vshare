@@ -104,8 +104,8 @@ function UserProfile() {
         </div>
         <hr className="border-gray-500" />
         <div className="flex flex-col">
-          {!searchedProfiles ? (
-            <div className=" text-white m-10 ">Please Add into connection</div>
+          {searchedProfiles.length === 0 ? (
+            <div className=" text-white m-10 ">Please Add into Connections</div>
           ) : (
             searchedProfiles.map((item) => (
               <Connection
