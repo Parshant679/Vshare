@@ -6,6 +6,7 @@ const initialState = {
     email: null,
     imageUrl: null,
   },
+  connections: [],
 };
 
 const userSlice = createSlice({
@@ -18,8 +19,11 @@ const userSlice = createSlice({
       state.user.email = action.payload.email;
       state.user.imageUrl = action.payload.imageUrl;
     },
+    searchConnections: (state, action) => {
+      state.connections = action.payload;
+    },
   },
 });
 
-export const { updateUser } = userSlice.actions;
+export const { updateUser, searchConnections } = userSlice.actions;
 export default userSlice.reducer;

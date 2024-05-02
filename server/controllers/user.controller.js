@@ -20,8 +20,6 @@ const userCtrl = {
     const accessToken = createAccessToken({ id: user._id });
     const refreshToken = createRefreshToken({ id: user._id });
 
-    delete user["password"];
-
     const options = {
       httpOnly: true,
       secure: false,
@@ -184,10 +182,10 @@ const userCtrl = {
   searchUsers: async (req, res) => {
     const { searchText, pageNo } = req.query;
     const skipCount = (pageNo - 1) * 10;
-
+    searchText = "/.*" + searchText + ".*/";
     const users = await User.aggregate([
       {
-        $match: { name: { $regex: searchText } },
+        $match: { name: { $regex: searchText, $options: "i" } },
       },
       {
         $project: {
@@ -211,6 +209,27 @@ const userCtrl = {
     return res
       .status(201)
       .json(new apiResponse(200, "data retrived successfully", users));
+  },
+  getConnectios: async (req, res) => {
+    const { id, pageNo } = req.query;
+    const skipCount = (pageNo - 1) * 10;
+
+    const connections = await Connection.aggregate([
+      {
+        $match: { "user1._id": id, connectionStatus: 1 },
+      },
+      {
+        $skip: skipCount,
+      },
+      { $limit: 10 },
+    ]);
+
+    if (!connections) {
+      throw new apiError(500, "Some Error Occure while retriving data");
+    }
+    return res
+      .status(201)
+      .json(new apiResponse(200, "data retrived successfully", connections));
   },
 };
 

@@ -12,8 +12,8 @@ import { GrInProgress } from "react-icons/gr";
 import VideoData from "../Video/VideoData";
 import FormDialog from "../../utils/FormDialog";
 import Logout from "../../utils/Logout";
-import { addVidoes } from "../../../feature/VideoSlice";
-import { useAppDispatch, useAppSelector } from "../../../hooks/useApp";
+import { addVideos } from "../../../feature/VideoSlice";
+import { useAppDispatch } from "../../../hooks/useApp";
 import VideoApi from "../Video/utils/videoApi";
 
 function UserSpace() {
@@ -26,17 +26,16 @@ function UserSpace() {
   const [filters, setfilters] = useState({
     status: -1,
     sort: "Desc",
-    searchText: "",
   });
 
   // video api calls
-  //
-
-  // useEffect(() => {
-  //   const res =  VideoApi.getUserVidoes(user_Id,pageNo);
-  //   dispatch(addVidoes(res.data));
-  // }, [pageNo]);
-  const videos = []; //useAppSelector((state) => state.youtubeData.Videos);
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await VideoApi.getUserVidoes(user_Id, pageNo);
+      dispatch(addVideos(res.data.data));
+    };
+    fetchData();
+  }, [pageNo]);
 
   // handeling filters
 
@@ -69,7 +68,7 @@ function UserSpace() {
           <h1 className="text-6xl text-white font-bold">My Space</h1>
           <div className="flex justify-around">
             <Logout />
-            <FormDialog />
+            <FormDialog id={user_Id} />
           </div>
         </div>
         <div>
@@ -142,7 +141,7 @@ function UserSpace() {
           </div>
         </div>
         <hr className="border-gray-500" />
-        <VideoData item={videos} filters={filters} />
+        <VideoData filters={filters} />
       </div>
     </div>
   );

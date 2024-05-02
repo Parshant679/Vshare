@@ -6,14 +6,20 @@ import "./UserSpace.css";
 import Logout from "../../utils/Logout";
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "../../../hooks/useApp";
-import { updateUser } from "../../../feature/UserSlice";
-
+import { updateUser, searchConnections } from "../../../feature/UserSlice";
+import SearchDialog from "../../utils/SearchDialog";
 import { useNavigate } from "react-router-dom";
 
 function UserProfile() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { id } = useParams();
+  const [isSearch, setSearch] = useState("");
+  const [pageNo, setPageNo] = useState(0);
+  function setSearchText(searchText) {
+    setSearch(searchText);
+    setPageNo(pageNo + 1);
+  }
 
   async function fetchData() {
     const res = await axios.get(
@@ -26,20 +32,48 @@ function UserProfile() {
     dispatch(updateUser(res.data.data));
   }
 
+  const fetchConnections = async () => {
+    const res = axios.get(
+      import.meta.env.VITE_BASE_URL +
+        "/user/getConnections?id=" +
+        id +
+        "&pageNo=1",
+      {
+        withCredentials: true,
+      }
+    );
+    dispatch(searchConnections(res.data.data));
+  };
+
   useEffect(() => {
     fetchData();
+    fetchConnections();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await axios.get(
+        import.meta.env.VITE_BASE_URL +
+          `/user/search?searchText=${isSearch}&pageNo=${pageNo}`,
+        {
+          withCredentials: true,
+        }
+      );
+      dispatch(searchConnections(res.data.data));
+    };
+    if (isSearch) {
+      fetchData();
+    }
+  }, [isSearch, pageNo]);
+
   const User = useAppSelector((state) => state.userData.user);
+  const searchedProfiles = useAppSelector(
+    (state) => state.userData.connections
+  );
 
-  const [connections, getConnections] = useState("");
-  const [isSearch, setSearch] = useState("");
-
-  function handleInput(e) {
-    try {
-      setSearch(e.target.value);
-    } catch (error) {
-      console.log(error);
+  function handleConnection() {
+    if (pageNo !== 1 || !searchedProfiles) {
+      fetchConnections();
     }
   }
 
@@ -60,29 +94,27 @@ function UserProfile() {
         </h2>
         <div className="mt-6 flex flex-wrap justify-between">
           <div className="text-white font-bold flex flex-wrap  justify-stretch">
-            <h2>Your Connections</h2>
+            <h2 onClick={handleConnection}>Your Connections</h2>
             {isSearch && <h2>Search Results</h2>}
           </div>
           <div className="flex p-2 text-gray-300">
-            <IoSearchOutline onClick={handleInput} />
-            <input
-              type="text"
-              placeholder="Search"
-              className="mx-1 outline-none font-size text-xs bg-black "
-              onChange={handleInput}
-            ></input>
+            <SearchDialog search={setSearchText} />
           </div>
         </div>
         <hr className="border-gray-500" />
-        {/* <div className="flex flex-col">
-          {User.connections ? (
+        <div className="flex flex-col">
+          {searchedProfiles ? (
             <div className=" text-white m-10 ">Please Add into connection</div>
           ) : (
-            User.connections.map((item) => (
-              <Connection key={item._id} connection={itme} />
+            searchedProfiles.map((item) => (
+              <Connection
+                key={item._id}
+                connection={item}
+                isSearch={isSearch}
+              />
             ))
           )}
-        </div> */}
+        </div>
       </div>
     </div>
   );
