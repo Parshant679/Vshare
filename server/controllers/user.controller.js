@@ -21,8 +21,8 @@ const userCtrl = {
     const refreshToken = createRefreshToken({ id: user._id });
 
     const options = {
-      httpOnly: false,
-      secure: false,
+      httpOnly: true,
+      secure: true,
       path: "/",
       sameSite: "none",
     };
