@@ -69,7 +69,7 @@ function UserProfile() {
   const searchedProfiles = useAppSelector(
     (state) => state.userData.connections
   );
-  console.log(searchedProfiles);
+
   function handleConnection() {
     if (pageNo !== 1 || !searchedProfiles) {
       fetchConnections();
