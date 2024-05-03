@@ -8,7 +8,7 @@ Introducing a platform where creativity meets convenience! this website provides
 ![image](https://github.com/Parshant679/Vshare/assets/54788475/a5b2c44b-2401-4f48-8f1a-9eea7e17738a)
 
 
-# Prequisits
+# Prerequisits
 -> Node JS installed  , React JS installed
 
 # Set up
