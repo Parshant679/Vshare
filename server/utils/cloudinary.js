@@ -1,3 +1,4 @@
+const fs = require("fs-extra");
 const cloudinary = require("cloudinary").v2;
 cloudinary.config({
   cloud_name: "dgypv5flo",
@@ -11,9 +12,10 @@ const cloudinaryMethods = {
       const response = await cloudinary.uploader.upload(LocalFilePath, {
         resource_type: "video",
       });
-      console.log("cloudinry responxe", response);
+      fs.unlink(LocalFilePath);
       return response;
     } catch (error) {
+      fs.unlink(LocalFilePath);
       console.log(error);
     }
   },
